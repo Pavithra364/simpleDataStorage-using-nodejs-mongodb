@@ -10,6 +10,9 @@ module.exports = (app) => {
     app.route('/v2/getStudent/:_id')
         .get(usersController.getStudent)
 
+    app.route('/v2/getStudent')
+        .get(usersController.getStudentByclass)
+
     app.route('/v2/getAllStudentDetails')
         .get(usersController.getAllStudentDetails);
 

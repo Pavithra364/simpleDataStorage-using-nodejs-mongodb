@@ -13,21 +13,54 @@ class userController
         let projection = {
             _id : 0 
         }
-        let list
+        return userService.findStudent(condition,projection)
+            .then((result) => {
+                res.status(200).json({
+                    status : 200 ,
+                    message : "THE STUDENT DATA",
+                    data : result
+                });
+            })
+            .catch((err) => {
+                res.status(400).json({
+                    status : 400 ,
+                    message : "UNABLE TO FETCH THE STUDENT DETAIL"
+                })
+            });
+    }
+
+    // The students details based on class wise
+
+    getStudentByclass(req,res)
+    {
+        let condition = {
+            Class : req.query.class
+        }
+        let projection = {
+            _id : 0 
+        }
+        let list ;
         return userService.findStudent(condition,projection)
             .then((result) => {
                 list = result;
-                return userService.findCount(condition)
+                return userService.findCount(condition);
             })
             .then((result) => {
                 list = {
-                    users : list,
-                    totalUsers : result
+                    studentDetails : list,
+                    totalStudents : result
                 }
-                res.send(list)
+                res.status(200).json({
+                    status : 200 ,
+                    message : "THE STUDENT DATA",
+                    data : list
+                });
             })
             .catch((err) => {
-                res.send("unable to fetch the details");
+                res.status(400).json({
+                    status : 400 ,
+                    message : "UNABLE TO FETCH THE STUDENT DETAIL"
+                })
             });
     }
 
@@ -36,14 +69,22 @@ class userController
     insertStudent(req,res){
         let studentInfo = req.body.attribites;
         return userService.insertStudents(studentInfo)
-        .then(() => {
-            res.send("THE USER INSERTED SUCCESFULLY");
+        .then((result) => {
+            res.status(200).json({
+                status : 200 ,
+                message : "THE STUDENT HAS INSERTED SUCCESSFULLY",
+                data : result
+            });
         })
         .catch((err) => {
-            console.log(err);
-            res.send("UNABLE TO INSERT");
+            res.status(400).json({
+                status : 400 ,
+                message : "UNABLE TO INSERT THE STUDENT DETAIL"
+            })
         })
     }
+
+    // Upadate the student 
 
     updateStudent(req,res){
         let attribites = req.body.attribites;
@@ -55,13 +96,20 @@ class userController
         }
         return userService.updateStudentDetails(condition,updateInfo)
         .then(() => {
-            res.send("THE USER INSERTED SUCCESFULLY");
+            res.status(400).json({
+                status : 400 ,
+                message : "UPDATED THE STUDENT DETAILS SUCCESSFULLY"
+            })
         })
         .catch((err) => {
             console.log(err);
-            res.send("UNABLE TO INSERT");
+            res.status(400).json({
+                status : 400 ,
+                message : "UNABLE TO UPDATE THE STUDENT DETAIL"
+            })
         })
     }
+
     // List of all users 
 
     getAllStudentDetails(req,res)
@@ -71,10 +119,17 @@ class userController
         }
         return userService.AllStudents(projection)
             .then((result) => {
-                res.send(result)
+                res.status(200).json({
+                    status : 200 ,
+                    message : "THE STUDENTS ARE",
+                    data : result
+                });
             })
             .catch((err) => {
-                res.send("ubable to fetch the details");
+                res.status(400).json({
+                    status : 400 ,
+                    message : "UNABLE TO FETCH THE STUDENT DETAILS",
+                });
             });
     }
 
@@ -86,11 +141,17 @@ class userController
         }
         return userService.removeStudentById(condition)
         .then((result) => {
-            res.send("The user has deleted successfully");
+            res.status(200).json({
+                status : 200 ,
+                message : "THE STUDENT HAS REMOVED SUCCESSFULLY",
+                data : result
+            });
         })
         .catch((err) => {
-            console.log(err);
-            res.send("The use has not deleted");
+            res.status(400).json({
+                status : 400 ,
+                message : "UNABLE TO REMOVE THE STUDENT DETAILS",
+            });
         })
     }
 }

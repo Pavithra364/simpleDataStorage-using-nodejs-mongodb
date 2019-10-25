@@ -66,6 +66,7 @@ class userService {
             })
         })
     }
+    
     AllStudents(projection) {
         return new Promise((resolve, reject) => {
                 return userserviceModel.findAll(projection)
